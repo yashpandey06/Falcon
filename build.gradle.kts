@@ -1,0 +1,49 @@
+val kotlinVersion: String by project
+val logbackVersion: String by project
+val ktorVersion: String by project
+
+plugins {
+    kotlin("jvm") version "1.8.22"
+    kotlin("plugin.serialization") version "1.8.22"
+    id("io.ktor.plugin") version "2.3.12"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+}
+
+group = "com.example"
+version = "0.0.1"
+
+application {
+    mainClass.set("com.example.ApplicationKt")
+
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+repositories {
+    mavenCentral()
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
+}
+
+dependencies {
+    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // Docker Client
+    implementation("com.github.docker-java:docker-java:3.2.8")
+
+    // Authentication
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
+
+    // Koin Dependency Injection
+    implementation("io.insert-koin:koin-ktor:3.4.3")
+    implementation("io.insert-koin:koin-core:3.4.3")
+
+    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+}
