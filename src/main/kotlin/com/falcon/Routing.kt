@@ -1,15 +1,49 @@
 package com.falcon
 
+import com.falcon.routes.docker.containerRoutes
 import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.get
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 
-fun Application.configureRouting() {
+fun Application.configureDockerContainerRoutes() {
     routing {
-        get("/") {
-            call.respondText("Hello World!")
+        route("container") {
+            containerRoutes()
+        }
+    }
+}
+
+fun Application.configureDockerImageRoutes() {
+    routing {
+        route("image") {
+        }
+    }
+}
+
+fun Application.configureDockerNetworkRoutes() {
+    routing {
+        route("network") {
+        }
+    }
+}
+
+fun Application.configureDockerVolumeRoutes() {
+    routing {
+        route("volume") {
+        }
+    }
+}
+
+fun Application.configureDockerRegistryRoutes() {
+    routing {
+        route("registry") {
+        }
+    }
+}
+
+fun Application.configureDockerStatsRoutes() {
+    routing {
+        route("stats") {
         }
     }
 }

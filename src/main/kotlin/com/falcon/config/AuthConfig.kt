@@ -10,7 +10,6 @@ import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
 
 class AuthConfig(private val httpClient: HttpClient) {
-
     fun configureSession(application: Application) {
         application.apply {
             install(Sessions) {
