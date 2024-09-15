@@ -1,4 +1,4 @@
-package com.falcon.stores
+package com.falcon.config
 
 import kotlinx.serialization.Serializable
 

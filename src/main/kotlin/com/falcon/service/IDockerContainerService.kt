@@ -1,7 +1,9 @@
 package com.falcon.service
 
+import com.falcon.config.ContainerDetails
+
 interface IDockerContainerService {
-    fun listContainers(): List<String>
+    fun listContainers(): List<ContainerDetails>
 
     fun startContainer(containerId: String): Boolean
 

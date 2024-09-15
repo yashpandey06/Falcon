@@ -3,8 +3,8 @@ val logbackVersion: String by project
 val ktorVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
     id("io.ktor.plugin") version "2.3.12"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
@@ -32,7 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
 
     // Docker Client
     implementation("com.github.docker-java:docker-java:3.2.8")

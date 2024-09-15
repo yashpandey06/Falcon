@@ -1,14 +1,18 @@
 package com.falcon
 
-import com.falcon.routes.docker.containerRoutes
+import com.falcon.routes.docker.container.containerRoutes
+import com.falcon.service.IDockerContainerService
 import io.ktor.server.application.Application
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import org.koin.core.qualifier.named
+import org.koin.ktor.ext.inject
 
 fun Application.configureDockerContainerRoutes() {
+    val containerService: IDockerContainerService by inject(named("docker-container"))
     routing {
         route("container") {
-            containerRoutes()
+            containerRoutes(containerService)
         }
     }
 }

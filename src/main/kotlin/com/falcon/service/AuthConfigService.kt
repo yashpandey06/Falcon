@@ -1,6 +1,6 @@
-package com.falcon.config
+package com.falcon.service
 
-import com.falcon.stores.UserSession
+import com.falcon.config.UserSession
 import io.ktor.client.HttpClient
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -9,7 +9,7 @@ import io.ktor.server.auth.oauth
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
 
-class AuthConfig(private val httpClient: HttpClient) {
+class AuthConfigService(private val httpClient: HttpClient) {
     fun configureSession(application: Application) {
         application.apply {
             install(Sessions) {
