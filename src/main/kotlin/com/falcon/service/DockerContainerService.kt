@@ -5,6 +5,12 @@ import com.falcon.docker.DockerClientProvider
 import com.falcon.utils.DockerUtils
 import com.falcon.utils.Logger
 import com.falcon.utils.ResponseMessages
+import com.github.dockerjava.api.model.Statistics
+import com.github.dockerjava.core.InvocationBuilder
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+
+
 
 class DockerContainerService : IDockerContainerService {
     private val dockerClient = DockerClientProvider().getDockerClient()
@@ -16,7 +22,7 @@ class DockerContainerService : IDockerContainerService {
             DockerUtils.mapToContainerDetails(allContainers)
         } catch (e: Exception) {
             logger.error(ResponseMessages.listContainersFailed(e.message ?: "Unknown error"), e)
-            emptyList()
+            throw e
         }
     }
 
@@ -31,7 +37,7 @@ class DockerContainerService : IDockerContainerService {
             true
         } catch (e: Exception) {
             logger.error(ResponseMessages.containerStartFailed(containerId), e)
-            false
+            throw e
         }
     }
 
@@ -46,7 +52,7 @@ class DockerContainerService : IDockerContainerService {
             true
         } catch (e: Exception) {
             logger.error(ResponseMessages.containerStopFailed(containerId), e)
-            false
+            throw e
         }
     }
 
@@ -67,7 +73,47 @@ class DockerContainerService : IDockerContainerService {
             }
         } catch (e: Exception) {
             logger.error(ResponseMessages.containerRemoveFailed(containerId), e)
-            false
+            throw e
+        }
+    }
+
+    //Test pending
+    override fun renameContainer(containerId: String, newName: String): Boolean {
+        if (containerId.isBlank() || newName.isBlank()) {
+            logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
+            return false
+        }
+        return try {
+            val container = dockerClient.inspectContainerCmd("container_name").exec()
+
+            dockerClient.renameContainerCmd(container.id).withName("new_container_name").exec()
+
+            logger.info(ResponseMessages.containerRenamed(containerId, newName))
+            true
+        } catch (e: Exception) {
+            logger.error(ResponseMessages.containerRenameFailed(containerId, newName), e)
+            throw e
+        }
+    }
+
+    override fun getContainerInfo(containerId: String): ContainerDetails? {
+        if (containerId.isBlank()) {
+            logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
+            return null
+        }
+        return try {
+            val allContainers = listContainers()
+            val containerInfo = DockerUtils.findContainerById(allContainers, containerId)
+            logger.info(containerInfo.toString())
+            if (containerInfo != null) {
+                logger.info(ResponseMessages.containerInfoRetrieved(containerId))
+            } else {
+                logger.warn(ResponseMessages.containerInfoNotRetrieved(containerId))
+            }
+            containerInfo
+        } catch (e: Exception) {
+            logger.error(ResponseMessages.containerInfoFailed(containerId), e)
+            throw e
         }
     }
 }

@@ -15,6 +15,18 @@ object ResponseMessages {
 
     fun listContainersFailed(message: String) = "Failed to list containers: $message"
 
+    fun containerRenamed(containerId: String, newName: String) = "Container $containerId renamed to $newName"
+
+    fun containerRenameFailed(containerId: String, newName: String) = "Failed to rename container $containerId to $newName"
+
+    fun containerInfoFailed(containerId: String) = "Failed to retrieve container info for $containerId"
+
+    fun containerInfoRetrieved(containerId: String) = "Container info retrieved for ID: $containerId"
+
+    fun containerInfoNotRetrieved(containerId: String)="No container found with ID: $containerId"
+
+    fun cpuUsageNotRetrieved(containerId: String) = "Failed to retrieve CPU usage for container $containerId"
+    fun cpuUsageRetrieved(containerId: String) = "CPU usage retrieved for container $containerId"
     const val CONTAINER_ID_REQUIRED = "Container ID is required"
     const val UNKNOWN_COMMAND = "Unknown Command"
     const val UNKNOWN_STATUS = "Unknown Status"

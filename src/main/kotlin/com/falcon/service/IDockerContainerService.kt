@@ -1,6 +1,7 @@
 package com.falcon.service
 
 import com.falcon.config.ContainerDetails
+import java.io.Writer
 
 interface IDockerContainerService {
     fun listContainers(): List<ContainerDetails>
@@ -10,4 +11,10 @@ interface IDockerContainerService {
     fun stopContainer(containerId: String): Boolean
 
     fun removeContainer(containerId: String): Boolean
+
+    fun renameContainer(containerId: String, newName: String): Boolean
+
+    fun getContainerInfo(containerId: String): ContainerDetails?
+
+//    suspend fun streamCPUInfo(containerId: String, response: Writer)
 }
