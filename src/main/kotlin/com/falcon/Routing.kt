@@ -1,7 +1,9 @@
 package com.falcon
 
-import com.falcon.routes.docker.container.containerRoutes
-import com.falcon.service.IDockerContainerService
+import com.falcon.routes.container.containerRoutes
+import com.falcon.routes.image.imageRoutes
+import com.falcon.service.container.IDockerContainerService
+import com.falcon.service.image.IDockerImageService
 import io.ktor.server.application.Application
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
@@ -18,36 +20,10 @@ fun Application.configureDockerContainerRoutes() {
 }
 
 fun Application.configureDockerImageRoutes() {
+    val imageService: IDockerImageService by inject(named("docker-image"))
     routing {
         route("image") {
-        }
-    }
-}
-
-fun Application.configureDockerNetworkRoutes() {
-    routing {
-        route("network") {
-        }
-    }
-}
-
-fun Application.configureDockerVolumeRoutes() {
-    routing {
-        route("volume") {
-        }
-    }
-}
-
-fun Application.configureDockerRegistryRoutes() {
-    routing {
-        route("registry") {
-        }
-    }
-}
-
-fun Application.configureDockerStatsRoutes() {
-    routing {
-        route("stats") {
+            imageRoutes(imageService)
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.falcon
 
 import com.falcon.plugins.falconModule
-import com.falcon.service.AuthConfigService
+import com.falcon.service.auth.AuthConfigService
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install

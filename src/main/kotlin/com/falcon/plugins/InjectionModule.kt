@@ -1,9 +1,11 @@
 package com.falcon.plugins
 
 import com.falcon.docker.DockerClientProvider
-import com.falcon.service.AuthConfigService
-import com.falcon.service.DockerContainerService
-import com.falcon.service.IDockerContainerService
+import com.falcon.service.auth.AuthConfigService
+import com.falcon.service.container.DockerContainerService
+import com.falcon.service.container.IDockerContainerService
+import com.falcon.service.image.DockerImageService
+import com.falcon.service.image.IDockerImageService
 import com.github.dockerjava.api.DockerClient
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -15,6 +17,6 @@ val falconModule =
             DockerClientProvider().getDockerClient()
         }
         single<IDockerContainerService>(named("docker-container")) { (DockerContainerService()) }
-
+        single<IDockerImageService>(named("docker-image")) { DockerImageService() }
         factory { AuthConfigService(get()) }
     }

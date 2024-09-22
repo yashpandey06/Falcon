@@ -15,24 +15,35 @@ object ResponseMessages {
 
     fun listContainersFailed(message: String) = "Failed to list containers: $message"
 
-    fun containerRenamed(containerId: String, newName: String) = "Container $containerId renamed to $newName"
+    fun containerRenamed(
+        containerId: String,
+        newName: String,
+    ) = "Container $containerId renamed to $newName"
 
-    fun containerRenameFailed(containerId: String, newName: String) = "Failed to rename container $containerId to $newName"
+    fun containerRenameFailed(
+        containerId: String,
+        newName: String,
+    ) = "Failed to rename container $containerId to $newName"
 
     fun containerInfoFailed(containerId: String) = "Failed to retrieve container info for $containerId"
 
     fun containerInfoRetrieved(containerId: String) = "Container info retrieved for ID: $containerId"
 
-    fun containerInfoNotRetrieved(containerId: String)="No container found with ID: $containerId"
+    fun containerInfoNotRetrieved(containerId: String) = "No container found with ID: $containerId"
 
     fun cpuUsageNotRetrieved(containerId: String) = "Failed to retrieve CPU usage for container $containerId"
+
     fun cpuUsageRetrieved(containerId: String) = "CPU usage retrieved for container $containerId"
-    const val CONTAINER_ID_REQUIRED = "Container ID is required"
+
+    fun imageRemoved(imageId: String) = "Image $imageId removed successfully"
+
+    fun imageRemoveFailed(imageId: String) = "Failed to remove image $imageId"
+
+    const val CONTAINER_ID_REQUIRED = "Container ID (name) is required"
     const val UNKNOWN_COMMAND = "Unknown Command"
     const val UNKNOWN_STATUS = "Unknown Status"
     const val UNKNOWN_STATE = "Unknown State"
     const val UNKNOWN_IMAGE = "Unknown Image"
-    const val UNKNOWN_IMAGE_ID = "Unknown Image ID"
     const val UNKNOWN_CONTAINER_NAME = "Unknown Name"
     const val UNKNOWN_CONTAINER_ID = "Unknown ID"
 }

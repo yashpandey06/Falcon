@@ -1,4 +1,4 @@
-package com.falcon.service
+package com.falcon.service.auth
 
 import com.falcon.config.UserSession
 import io.ktor.client.HttpClient

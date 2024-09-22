@@ -1,16 +1,11 @@
-package com.falcon.service
+package com.falcon.service.container
 
 import com.falcon.config.ContainerDetails
 import com.falcon.docker.DockerClientProvider
 import com.falcon.utils.DockerUtils
 import com.falcon.utils.Logger
 import com.falcon.utils.ResponseMessages
-import com.github.dockerjava.api.model.Statistics
-import com.github.dockerjava.core.InvocationBuilder
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-
-
+import com.github.dockerjava.api.exception.DockerException
 
 class DockerContainerService : IDockerContainerService {
     private val dockerClient = DockerClientProvider().getDockerClient()
@@ -20,7 +15,7 @@ class DockerContainerService : IDockerContainerService {
         return try {
             val allContainers = dockerClient.listContainersCmd().withShowAll(true).exec()
             DockerUtils.mapToContainerDetails(allContainers)
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.listContainersFailed(e.message ?: "Unknown error"), e)
             throw e
         }
@@ -35,7 +30,7 @@ class DockerContainerService : IDockerContainerService {
             dockerClient.startContainerCmd(containerId).exec()
             logger.info(ResponseMessages.containerStarted(containerId))
             true
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerStartFailed(containerId), e)
             throw e
         }
@@ -50,7 +45,7 @@ class DockerContainerService : IDockerContainerService {
             dockerClient.stopContainerCmd(containerId).exec()
             logger.info(ResponseMessages.containerStopped(containerId))
             true
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerStopFailed(containerId), e)
             throw e
         }
@@ -71,14 +66,17 @@ class DockerContainerService : IDockerContainerService {
                 logger.error(ResponseMessages.containerRemoveFailed(containerId))
                 false
             }
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerRemoveFailed(containerId), e)
             throw e
         }
     }
 
-    //Test pending
-    override fun renameContainer(containerId: String, newName: String): Boolean {
+    // Test pending
+    override fun renameContainer(
+        containerId: String,
+        newName: String,
+    ): Boolean {
         if (containerId.isBlank() || newName.isBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return false
@@ -90,7 +88,7 @@ class DockerContainerService : IDockerContainerService {
 
             logger.info(ResponseMessages.containerRenamed(containerId, newName))
             true
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerRenameFailed(containerId, newName), e)
             throw e
         }
@@ -111,7 +109,7 @@ class DockerContainerService : IDockerContainerService {
                 logger.warn(ResponseMessages.containerInfoNotRetrieved(containerId))
             }
             containerInfo
-        } catch (e: Exception) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerInfoFailed(containerId), e)
             throw e
         }
