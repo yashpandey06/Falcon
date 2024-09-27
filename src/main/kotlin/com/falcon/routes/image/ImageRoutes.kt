@@ -10,10 +10,34 @@ import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import kotlin.system.measureTimeMillis
 
 fun Route.imageRoutes(service: IDockerImageService) {
     val logger = Logger.getLogger(DockerImageService::class.java)
+
+    // POST Routes
+//    get {
+//        val latency = measureTimeMillis {
+//            val dockerImage = call.parameters["image"] ?: throw IllegalArgumentException("Image cannot be null")
+//            println(dockerImage)
+//            val imagesPulledSuccessfully = service.pullImage(dockerImage)
+//            if (imagesPulledSuccessfully) {
+//                call.respond(HttpStatusCode.OK, mapOf("message" to "Image pull succeeded"))
+//            } else {
+//                call.respond(HttpStatusCode.InternalServerError, mapOf("error" to "Image pull failed"))
+//            }
+//        }
+//        Logger.logRequestDetails(
+//            logger,
+//            operationType = Constants.OPERATION_PULL_IMAGE,
+//            requestType = Constants.REQUEST_TYPE_GET,
+//            requestCode = HttpStatusCode.OK.value,
+//            latency = latency
+//        )
+//    }
+
     // DELETE Routes
     delete {
         val latency =

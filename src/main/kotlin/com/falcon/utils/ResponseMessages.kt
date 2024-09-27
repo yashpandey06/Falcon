@@ -39,6 +39,10 @@ object ResponseMessages {
 
     fun imageRemoveFailed(imageId: String) = "Failed to remove image $imageId"
 
+    fun imagePulled(imageId: String) = "Pulling image $imageId started"
+
+    fun imagePullFailed(imageId: String) = "Failed to pull image $imageId"
+
     const val CONTAINER_ID_REQUIRED = "Container ID (name) is required"
     const val UNKNOWN_COMMAND = "Unknown Command"
     const val UNKNOWN_STATUS = "Unknown Status"

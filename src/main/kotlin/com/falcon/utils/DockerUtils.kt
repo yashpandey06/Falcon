@@ -19,7 +19,7 @@ object DockerUtils {
                 id = container.id ?: ResponseMessages.UNKNOWN_CONTAINER_ID,
                 name = container.names?.firstOrNull()?.removePrefix("/") ?: ResponseMessages.UNKNOWN_CONTAINER_NAME,
                 image = container.image ?: ResponseMessages.UNKNOWN_IMAGE,
-                imageId = container.imageId ?: ResponseMessages.UNKNOWN_IMAGE_ID,
+                imageId = container.imageId ?: ResponseMessages.UNKNOWN_IMAGE,
                 command = container.command ?: ResponseMessages.UNKNOWN_COMMAND,
                 created = container.created ?: 0L,
                 status = container.status ?: ResponseMessages.UNKNOWN_STATUS,

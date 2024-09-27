@@ -12,6 +12,7 @@ object Constants {
 
     // Images Operation Types
     const val OPERATION_REMOVE_IMAGE = "Remove Image"
+    const val OPERATION_PULL_IMAGE = "Pull Image"
 
     // Request Types
     const val REQUEST_TYPE_GET = "GET"

@@ -21,8 +21,8 @@ class DockerContainerService : IDockerContainerService {
         }
     }
 
-    override fun startContainer(containerId: String): Boolean {
-        if (containerId.isBlank()) {
+    override fun startContainer(containerId: String?): Boolean {
+        if (containerId.isNullOrBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return false
         }
@@ -36,8 +36,8 @@ class DockerContainerService : IDockerContainerService {
         }
     }
 
-    override fun stopContainer(containerId: String): Boolean {
-        if (containerId.isBlank()) {
+    override fun stopContainer(containerId: String?): Boolean {
+        if (containerId.isNullOrBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return false
         }
@@ -51,14 +51,13 @@ class DockerContainerService : IDockerContainerService {
         }
     }
 
-    override fun removeContainer(containerId: String): Boolean {
-        if (containerId.isBlank()) {
+    override fun removeContainer(containerId: String?): Boolean {
+        if (containerId.isNullOrBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return false
         }
         return try {
             if (stopContainer(containerId)) {
-                // Remove the container
                 dockerClient.removeContainerCmd(containerId).exec()
                 logger.info(ResponseMessages.containerRemoved(containerId))
                 true
@@ -72,19 +71,18 @@ class DockerContainerService : IDockerContainerService {
         }
     }
 
-    // Test pending
     override fun renameContainer(
-        containerId: String,
-        newName: String,
+        containerId: String?,
+        newName: String?,
     ): Boolean {
-        if (containerId.isBlank() || newName.isBlank()) {
+        if (containerId.isNullOrBlank() || newName.isNullOrBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return false
         }
         return try {
-            val container = dockerClient.inspectContainerCmd("container_name").exec()
+            val container = dockerClient.inspectContainerCmd(containerId).exec()
 
-            dockerClient.renameContainerCmd(container.id).withName("new_container_name").exec()
+            dockerClient.renameContainerCmd(container.id).withName(newName).exec()
 
             logger.info(ResponseMessages.containerRenamed(containerId, newName))
             true
@@ -94,8 +92,8 @@ class DockerContainerService : IDockerContainerService {
         }
     }
 
-    override fun getContainerInfo(containerId: String): ContainerDetails? {
-        if (containerId.isBlank()) {
+    override fun getContainerInfo(containerId: String?): ContainerDetails? {
+        if (containerId.isNullOrBlank()) {
             logger.error(ResponseMessages.CONTAINER_ID_REQUIRED)
             return null
         }

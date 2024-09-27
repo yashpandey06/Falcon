@@ -8,6 +8,7 @@ import com.falcon.utils.Logger
 import com.falcon.utils.ResponseMessages
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -102,7 +103,7 @@ fun Route.containerRoutes(service: IDockerContainerService) {
     post("/stop/{id}") {
         val containerId =
             call.parameters["id"] ?: throw IllegalArgumentException(ResponseMessages.CONTAINER_ID_REQUIRED)
-
+println(containerId)
         val latency =
             measureTimeMillis {
                 val success = service.stopContainer(containerId)
@@ -122,21 +123,21 @@ fun Route.containerRoutes(service: IDockerContainerService) {
     }
 
     post("rename/{id}") {
-        val containerId =
-            call.parameters["id"] ?: throw IllegalArgumentException(ResponseMessages.CONTAINER_ID_REQUIRED)
-        val newName = call.receiveText()
-        val latency =
-            measureTimeMillis {
-                val success = service.renameContainer(containerId, newName)
-                if (success) {
-                    call.respond(HttpStatusCode.OK, ResponseMessages.containerRenamed(containerId, newName))
-                } else {
-                    call.respond(
-                        HttpStatusCode.InternalServerError,
-                        ResponseMessages.containerRenameFailed(containerId, newName),
-                    )
-                }
+        val containerId = call.parameters["id"] ?: throw IllegalArgumentException(ResponseMessages.CONTAINER_ID_REQUIRED)
+        val requestBody = call.receive<Map<String, String>>()
+        val newName = requestBody["new_name"] ?: throw IllegalArgumentException("New name is required")
+
+        val latency = measureTimeMillis {
+            val success = service.renameContainer(containerId, newName)
+            if (success) {
+                call.respond(HttpStatusCode.OK, ResponseMessages.containerRenamed(containerId, newName))
+            } else {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    ResponseMessages.containerRenameFailed(containerId, newName),
+                )
             }
+        }
 
         Logger.logRequestDetails(
             logger,
