@@ -42,3 +42,12 @@ data class ContainerMount(
     @SerialName("mount_mode") val mode: String,
     @SerialName("read_write") val rw: Boolean,
 )
+
+@Serializable
+data class ContainerMetrics(
+    @SerialName("container_id") val containerId: String,
+    @SerialName("memory_usage_mb") val memoryUsageMb: Long,
+    @SerialName("network_usage") val networkUsage: String,
+    @SerialName("cpu_usage_percentage") val cpuUsagePercentage: Double,
+    @SerialName("system_cpu_usage") val systemCpuUsage: Long,
+)

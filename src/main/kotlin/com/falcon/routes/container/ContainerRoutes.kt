@@ -9,7 +9,6 @@ import com.falcon.utils.ResponseMessages
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.request.receive
-import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -58,25 +57,21 @@ fun Route.containerRoutes(service: IDockerContainerService) {
         )
     }
 
-//    get("cpu/{id}") {
-//        val containerId = call.parameters["id"]
-//
-//        if (containerId != null) {
-//            try {
-//                // Stream CPU info using respondTextWriter
-//                call.respondTextWriter(contentType = ContentType.Text.Plain) {
-//                    service.streamCPUInfo(containerId, this)
-//                }
-//            } catch (e: Exception) {
-//                // Log error and respond with an error message if streaming fails
-//                logger.error("Error streaming CPU info for container $containerId", e)
-//                call.respond(HttpStatusCode.InternalServerError, "Failed to stream CPU info")
-//            }
-//        } else {
-//            // Handle case where container ID is missing
-//            call.respond(HttpStatusCode.BadRequest, ResponseMessages.CONTAINER_ID_REQUIRED)
-//        }
-//    }
+    get("/metrics/{id}") {
+        val containerId = call.parameters["id"] ?: throw IllegalArgumentException(ResponseMessages.CONTAINER_ID_REQUIRED)
+        val latency =
+            measureTimeMillis {
+                val stats = service.getContainerMetrics(containerId)
+                call.respond(HttpStatusCode.OK, mapOf("Stats" to stats))
+            }
+        Logger.logRequestDetails(
+            logger,
+            operationType = Constants.OPERATION_GET_CONTAINER_METRICS,
+            requestType = Constants.REQUEST_TYPE_GET,
+            requestCode = HttpStatusCode.OK.value,
+            latency = latency,
+        )
+    }
 
     // POST Routes
     post("/start/{id}") {
@@ -103,7 +98,6 @@ fun Route.containerRoutes(service: IDockerContainerService) {
     post("/stop/{id}") {
         val containerId =
             call.parameters["id"] ?: throw IllegalArgumentException(ResponseMessages.CONTAINER_ID_REQUIRED)
-println(containerId)
         val latency =
             measureTimeMillis {
                 val success = service.stopContainer(containerId)
@@ -127,17 +121,18 @@ println(containerId)
         val requestBody = call.receive<Map<String, String>>()
         val newName = requestBody["new_name"] ?: throw IllegalArgumentException("New name is required")
 
-        val latency = measureTimeMillis {
-            val success = service.renameContainer(containerId, newName)
-            if (success) {
-                call.respond(HttpStatusCode.OK, ResponseMessages.containerRenamed(containerId, newName))
-            } else {
-                call.respond(
-                    HttpStatusCode.InternalServerError,
-                    ResponseMessages.containerRenameFailed(containerId, newName),
-                )
+        val latency =
+            measureTimeMillis {
+                val success = service.renameContainer(containerId, newName)
+                if (success) {
+                    call.respond(HttpStatusCode.OK, ResponseMessages.containerRenamed(containerId, newName))
+                } else {
+                    call.respond(
+                        HttpStatusCode.InternalServerError,
+                        ResponseMessages.containerRenameFailed(containerId, newName),
+                    )
+                }
             }
-        }
 
         Logger.logRequestDetails(
             logger,

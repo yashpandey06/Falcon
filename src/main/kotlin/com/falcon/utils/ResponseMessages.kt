@@ -43,6 +43,8 @@ object ResponseMessages {
 
     fun imagePullFailed(imageId: String) = "Failed to pull image $imageId"
 
+    fun containerMetricsNotRetrieved(containerId: String) = "Failed to retrieve container metrics"
+
     const val CONTAINER_ID_REQUIRED = "Container ID (name) is required"
     const val UNKNOWN_COMMAND = "Unknown Command"
     const val UNKNOWN_STATUS = "Unknown Status"

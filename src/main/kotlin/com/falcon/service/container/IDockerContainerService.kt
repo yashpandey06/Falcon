@@ -1,22 +1,23 @@
 package com.falcon.service.container
 
 import com.falcon.config.ContainerDetails
+import com.falcon.config.ContainerMetrics
 
 interface IDockerContainerService {
-    fun listContainers(): List<ContainerDetails>
+    suspend fun listContainers(): List<ContainerDetails>
 
-    fun startContainer(containerId: String?): Boolean
+    suspend fun startContainer(containerId: String?): Boolean
 
-    fun stopContainer(containerId: String?): Boolean
+    suspend fun stopContainer(containerId: String?): Boolean
 
-    fun removeContainer(containerId: String?): Boolean
+    suspend fun removeContainer(containerId: String?): Boolean
 
-    fun renameContainer(
+    suspend fun renameContainer(
         containerId: String?,
         newName: String?,
     ): Boolean
 
-    fun getContainerInfo(containerId: String?): ContainerDetails?
+    suspend fun getContainerInfo(containerId: String?): ContainerDetails?
 
-//    suspend fun streamCPUInfo(containerId: String, response: Writer)
+    suspend fun getContainerMetrics(containerId: String?): ContainerMetrics?
 }

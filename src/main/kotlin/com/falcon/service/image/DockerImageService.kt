@@ -29,7 +29,7 @@ class DockerImageService : IDockerImageService {
         }
     }
 
-    override suspend fun  pullImage(imageId: String?): Boolean {
+    override suspend fun pullImage(imageId: String?): Boolean {
         if (imageId.isNullOrBlank()) {
             logger.error(UNKNOWN_IMAGE)
             return false

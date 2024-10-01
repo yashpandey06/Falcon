@@ -9,6 +9,7 @@ object Constants {
     const val OPERATION_RENAME_CONTAINER = "Rename Container"
     const val OPERATION_GET_CONTAINER = "Get Specific Container"
     const val OPERATION_GET_CPU_USAGE = "Get CPU Usage For a Container"
+    const val OPERATION_GET_CONTAINER_METRICS = "Container Metrics"
 
     // Images Operation Types
     const val OPERATION_REMOVE_IMAGE = "Remove Image"
