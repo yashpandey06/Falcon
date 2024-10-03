@@ -40,6 +40,7 @@ dependencies {
 
     // Authentication
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
 
     // Koin Dependency Injection
     implementation("io.insert-koin:koin-ktor:3.4.3")
