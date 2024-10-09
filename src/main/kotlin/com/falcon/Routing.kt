@@ -1,7 +1,9 @@
 package com.falcon
 
+import com.falcon.routes.auth.authRoutes
 import com.falcon.routes.container.containerRoutes
 import com.falcon.routes.image.imageRoutes
+import com.falcon.service.auth.IAuthenticationService
 import com.falcon.service.container.IDockerContainerService
 import com.falcon.service.image.IDockerImageService
 import io.ktor.server.application.Application
@@ -24,6 +26,15 @@ fun Application.configureDockerImageRoutes() {
     routing {
         route("image") {
             imageRoutes(imageService)
+        }
+    }
+}
+
+fun Application.configureAuthRoutes(){
+    val authService: IAuthenticationService by inject()
+    routing {
+        route("auth"){
+            authRoutes(authService)
         }
     }
 }

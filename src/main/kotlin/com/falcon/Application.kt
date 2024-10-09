@@ -1,9 +1,14 @@
 package com.falcon
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import com.falcon.plugins.falconModule
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -23,11 +28,14 @@ fun Application.module() {
             Json {
                 prettyPrint = true
                 isLenient = true
+                ignoreUnknownKeys = true
             },
         )
     }
 
     configureKoin()
+    configureAuthentication()
+    configureAuthRoutes()
     configureDockerContainerRoutes()
 }
 
@@ -37,7 +45,24 @@ fun Application.configureKoin() {
     }
 }
 
+
+// Placed a dummy secret keys for the algorithm for the secret-key
 fun Application.configureAuthentication() {
-    val authConfig: AuthConfigService by inject()
-    authConfig.configureSession(this)
+    install(Authentication) {
+        jwt("auth-jwt") {
+            realm = "your-realm"
+            verifier(
+                JWT
+                    .require(Algorithm.HMAC256("your-secret-key"))
+                    .withIssuer("your-issuer")
+                    .withAudience("your-audience")
+                    .build()
+            )
+            validate { credential ->
+                if (credential.payload.getClaim("email").asString() != "") {
+                    JWTPrincipal(credential.payload)
+                } else null
+            }
+        }
+    }
 }

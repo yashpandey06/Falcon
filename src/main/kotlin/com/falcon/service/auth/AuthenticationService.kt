@@ -9,14 +9,13 @@ import java.util.Date
 
 class AuthenticationService:IAuthenticationService,KoinComponent {
     private val dbService : IDbService by inject()
-    override fun authenticate(email:String,password:String): String {
-
-        val user= dbService.findUserByEmail(email) ?: throw IllegalArgumentException("Invalid email or password")
-        if(user.password==password){
+    override fun authenticate(email: String, password: String): String {
+        val user = dbService.findUserByEmail(email) ?: throw IllegalArgumentException("Invalid email or password")
+        return if (user.password == password) {
             generateToken(email)
+        } else {
+            "Auth Failed"
         }
-        // TODO ("Proper handling of responses)
-        return "Auth Failed"
     }
 
     override fun generateToken(email: String): String {
@@ -24,7 +23,7 @@ class AuthenticationService:IAuthenticationService,KoinComponent {
         return JWT.create()
             .withIssuer("your-issuer")
             .withAudience("your-audience")
-            .withClaim("username", email)
+            .withClaim("email", email)
             .withExpiresAt(Date(System.currentTimeMillis() + 60000))
             .sign(algorithm)
     }

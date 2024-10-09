@@ -12,3 +12,11 @@ data class UserInfo(
     @SerialName("user_password")
     val password:String,
 )
+@Serializable
+data class LoginRequest(
+    @SerialName("user_mail")
+    val email: String,
+    @SerialName("user_password")
+    val password: String
+)
+

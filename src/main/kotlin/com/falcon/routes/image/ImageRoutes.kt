@@ -7,16 +7,16 @@ import com.falcon.utils.Logger
 import com.falcon.utils.ResponseMessages
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
-import io.ktor.server.routing.get
 import kotlin.system.measureTimeMillis
 
 fun Route.imageRoutes(service: IDockerImageService) {
     val logger = Logger.getLogger(DockerImageService::class.java)
-
-    // POST Routes
+    authenticate("auth-jwt") {
+        // POST Routes
 //    get {
 //        val latency = measureTimeMillis {
 //            val dockerImage = call.parameters["image"] ?: throw IllegalArgumentException("Image cannot be null")
@@ -37,25 +37,26 @@ fun Route.imageRoutes(service: IDockerImageService) {
 //        )
 //    }
 
-    // DELETE Routes
-    delete {
-        val latency =
-            measureTimeMillis {
-                val dockerImage =
-                    call.parameters["image"] ?: throw IllegalArgumentException("Image name cannot be null")
-                val imageRemoved = service.removeImage(dockerImage)
-                if (imageRemoved) {
-                    call.respond(HttpStatusCode.OK, ResponseMessages.imageRemoved(dockerImage))
-                } else {
-                    call.respond(HttpStatusCode.InternalServerError)
+        // DELETE Routes
+        delete {
+            val latency =
+                measureTimeMillis {
+                    val dockerImage =
+                        call.parameters["image"] ?: throw IllegalArgumentException("Image name cannot be null")
+                    val imageRemoved = service.removeImage(dockerImage)
+                    if (imageRemoved) {
+                        call.respond(HttpStatusCode.OK, ResponseMessages.imageRemoved(dockerImage))
+                    } else {
+                        call.respond(HttpStatusCode.InternalServerError)
+                    }
                 }
-            }
-        Logger.logRequestDetails(
-            logger,
-            operationType = Constants.OPERATION_REMOVE_IMAGE,
-            requestType = Constants.REQUEST_TYPE_DELETE,
-            requestCode = HttpStatusCode.OK.value,
-            latency = latency,
-        )
+            Logger.logRequestDetails(
+                logger,
+                operationType = Constants.OPERATION_REMOVE_IMAGE,
+                requestType = Constants.REQUEST_TYPE_DELETE,
+                requestCode = HttpStatusCode.OK.value,
+                latency = latency,
+            )
+        }
     }
 }
