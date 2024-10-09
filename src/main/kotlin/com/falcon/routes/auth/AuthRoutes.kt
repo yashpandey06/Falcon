@@ -10,18 +10,16 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 
-
-fun Route.authRoutes(authService:IAuthenticationService){
-
+fun Route.authRoutes(authService: IAuthenticationService) {
     post("/login") {
         val loginRequest = call.receive<LoginRequest>()
         val email = loginRequest.email
         val password = loginRequest.password
-        if(email.isBlank()){
+        if (email.isBlank()) {
             call.respondText("Email cannot be empty", status = HttpStatusCode.BadRequest)
             return@post
         }
-        if(password.isBlank()){
+        if (password.isBlank()) {
             call.respondText("Password cannot be empty", status = HttpStatusCode.BadRequest)
             return@post
         }

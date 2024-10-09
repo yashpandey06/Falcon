@@ -88,7 +88,7 @@ fun Route.containerRoutes(service: IDockerContainerService) {
                     } else {
                         call.respond(
                             HttpStatusCode.InternalServerError,
-                            ResponseMessages.containerStartFailed(containerId)
+                            ResponseMessages.containerStartFailed(containerId),
                         )
                     }
                 }
@@ -112,7 +112,7 @@ fun Route.containerRoutes(service: IDockerContainerService) {
                     } else {
                         call.respond(
                             HttpStatusCode.InternalServerError,
-                            ResponseMessages.containerStopFailed(containerId)
+                            ResponseMessages.containerStopFailed(containerId),
                         )
                     }
                 }

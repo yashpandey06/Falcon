@@ -161,7 +161,7 @@ class DockerContainerService : IDockerContainerService {
                 cpuUsagePercentage = cpuUsagePercentage,
                 systemCpuUsage = systemCpuUsage,
             )
-        }  catch (e: DockerException) {
+        } catch (e: DockerException) {
             logger.error(ResponseMessages.containerMetricsNotRetrieved(containerId), e)
             throw e
         }

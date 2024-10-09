@@ -1,15 +1,19 @@
 package com.falcon.service.auth
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import com.falcon.service.db.IDbService
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import java.util.Date
 
-class AuthenticationService:IAuthenticationService,KoinComponent {
-    private val dbService : IDbService by inject()
-    override fun authenticate(email: String, password: String): String {
+class AuthenticationService : IAuthenticationService, KoinComponent {
+    private val dbService: IDbService by inject()
+
+    override fun authenticate(
+        email: String,
+        password: String,
+    ): String {
         val user = dbService.findUserByEmail(email) ?: throw IllegalArgumentException("Invalid email or password")
         return if (user.password == password) {
             generateToken(email)

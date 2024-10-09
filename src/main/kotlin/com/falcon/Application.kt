@@ -14,7 +14,6 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
-import org.koin.ktor.ext.inject
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
@@ -45,8 +44,7 @@ fun Application.configureKoin() {
     }
 }
 
-
-// Placed a dummy secret keys for the algorithm for the secret-key
+// Placed a dummy secret keys for the algorithm for the authentication with dummy mock DBService
 fun Application.configureAuthentication() {
     install(Authentication) {
         jwt("auth-jwt") {
@@ -56,12 +54,14 @@ fun Application.configureAuthentication() {
                     .require(Algorithm.HMAC256("your-secret-key"))
                     .withIssuer("your-issuer")
                     .withAudience("your-audience")
-                    .build()
+                    .build(),
             )
             validate { credential ->
                 if (credential.payload.getClaim("email").asString() != "") {
                     JWTPrincipal(credential.payload)
-                } else null
+                } else {
+                    null
+                }
             }
         }
     }

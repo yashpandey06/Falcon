@@ -30,10 +30,10 @@ fun Application.configureDockerImageRoutes() {
     }
 }
 
-fun Application.configureAuthRoutes(){
+fun Application.configureAuthRoutes() {
     val authService: IAuthenticationService by inject()
     routing {
-        route("auth"){
+        route("auth") {
             authRoutes(authService)
         }
     }
