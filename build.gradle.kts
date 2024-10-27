@@ -13,7 +13,7 @@ group = "com.example"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.example.ApplicationKt")
+    mainClass.set("com.falcon.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -38,13 +38,17 @@ dependencies {
     // Docker Client
     implementation("com.github.docker-java:docker-java:3.2.8")
 
+    // Koin Dependency Injection
+    implementation("io.insert-koin:koin-ktor:3.4.3")
+    implementation("io.insert-koin:koin-core:3.4.3")
+
     // Authentication
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
 
-    // Koin Dependency Injection
-    implementation("io.insert-koin:koin-ktor:3.4.3")
-    implementation("io.insert-koin:koin-core:3.4.3")
+    // Database dependencies (ORM)
+    implementation("org.ktorm:ktorm-core:3.5.0")
+    implementation("mysql:mysql-connector-java:8.0.26")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")

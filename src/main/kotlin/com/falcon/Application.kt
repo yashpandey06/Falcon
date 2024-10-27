@@ -2,6 +2,7 @@ package com.falcon
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.falcon.database.DatabaseClient
 import com.falcon.plugins.falconModule
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -36,6 +37,7 @@ fun Application.module() {
     configureAuthentication()
     configureAuthRoutes()
     configureDockerContainerRoutes()
+    configureDatabase()
 }
 
 fun Application.configureKoin() {
@@ -65,4 +67,8 @@ fun Application.configureAuthentication() {
             }
         }
     }
+}
+
+fun Application.configureDatabase() {
+    DatabaseClient.initDB()
 }
