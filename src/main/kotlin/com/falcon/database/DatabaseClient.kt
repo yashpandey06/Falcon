@@ -10,13 +10,11 @@ object DatabaseClient {
     private val dbUser = config.getString("falcon.mysql-database.user")
     private val dbPassword = config.getString("falcon.mysql-database.password")
 
-    fun initDB(): Database {
-        val connection: Database =
-            Database.connect(
-                url = dbUrl,
-                user = dbUser,
-                password = dbPassword,
-            )
-        return connection
+    val database: Database by lazy {
+        Database.connect(
+            url = dbUrl,
+            user = dbUser,
+            password = dbPassword,
+        )
     }
 }

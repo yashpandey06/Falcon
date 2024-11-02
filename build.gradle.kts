@@ -49,6 +49,7 @@ dependencies {
     // Database dependencies (ORM)
     implementation("org.ktorm:ktorm-core:3.5.0")
     implementation("mysql:mysql-connector-java:8.0.26")
+    implementation("at.favre.lib:bcrypt:0.9.0")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")

@@ -1,10 +1,12 @@
 package com.falcon.service.auth
 
+import com.falcon.config.UserInfo
+
 interface IAuthenticationService {
-    fun authenticate(
+    suspend fun authenticate(
         email: String,
         password: String,
     ): String
 
-    fun generateToken(email: String): String
+    suspend fun registerUser(newUser: UserInfo)
 }

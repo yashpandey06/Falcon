@@ -70,5 +70,5 @@ fun Application.configureAuthentication() {
 }
 
 fun Application.configureDatabase() {
-    DatabaseClient.initDB()
+    DatabaseClient.database
 }
